@@ -11,6 +11,7 @@ app.get("/welcome", (req, res) => {
 app.use("/auth", require("./routes/auth.route"));
 app.use("/product", require("./routes/product.route"));
 app.use("/store", require("./routes/store.route"));
+app.use("/stoke", require("./routes/stock.route"));
 
 app.use((err, req, res, next) => {
   console.log(err);
