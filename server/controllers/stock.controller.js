@@ -1,4 +1,7 @@
-const { adjustStockService } = require("../services/stock.service");
+const {
+  adjustStockService,
+  transferStockService,
+} = require("../services/stock.service");
 
 const adjustStock = async (req, res, next) => {
   try {
@@ -14,6 +17,21 @@ const adjustStock = async (req, res, next) => {
   }
 };
 
+const transferStock = async (req, res, next) => {
+  try {
+    const stock = await transferStockService(req.body);
+    
+    return res.status(200).json({
+      success: true,
+      message: "stock transfered successfully",
+      data: stock,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   adjustStock,
+  transferStock,
 };

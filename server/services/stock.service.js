@@ -1,3 +1,4 @@
+const mongoose = require("mongoose");
 const Product = require("../models/Product");
 const Stock = require("../models/Stock");
 const Store = require("../models/Store");
@@ -54,6 +55,78 @@ const adjustStockService = async ({ productId, storeId, quantity }) => {
   return updateStock;
 };
 
+const transferStockService = async ({
+  productId,
+  sourseStoreId,
+  destinationStoreId,
+  quantity,
+}) => {
+  const session = await mongoose.startSession();
+  try {
+    const result = await session.withTransaction(async () => {
+      const product = await Product.findById(productId).session(session);
+      if (!product) {
+        throw new AppError("product not found", 404);
+      }
+      const sourseStore = await Store.findById(sourseStoreId).session(session);
+      if (!sourseStore) {
+        throw new AppError("sourse store not found", 404);
+      }
+      const destinationStore =
+        await Store.findById(destinationStoreId).session(session);
+      if (!destinationStore) {
+        throw new AppError("destination store not found", 404);
+      }
+
+      const sourseStock = await Stock.findOneAndUpdate(
+        {
+          product: productId,
+          store: sourseStoreId,
+          quantity: {
+            $gte: quantity,
+          },
+        },
+        {
+          $inc: {
+            quantity: -quantity,
+          },
+        },
+        {
+          new: true,
+          session,
+        },
+      );
+      if (!sourseStock) {
+        throw new AppError("sourse strore didnt have enough stock", 400);
+      }
+
+      const destinationStoke = await Stock.findOneAndUpdate(
+        {
+          product: productId,
+          store: destinationStoreId,
+        },
+        {
+          $inc: { quantity },
+        },
+        {
+          new: true,
+          upsert: true,
+          runValidators: true,
+          session,
+        },
+      );
+      return {
+        sourseStock,
+        destinationStoke,
+      };
+    });
+    return result;
+  } finally {
+    await session.endSession();
+  }
+};
+
 module.exports = {
   adjustStockService,
+  transferStockService,
 };
