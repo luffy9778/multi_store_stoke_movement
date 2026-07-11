@@ -1,5 +1,7 @@
 const User = require("../models/User");
 const authService = require("../services/auth.service");
+const AppError = require("../utils/AppError");
+const jwt = require("jsonwebtoken");
 
 const signUp = async (req, res, next) => {
   try {
@@ -33,4 +35,29 @@ const login = async (req, res, next) => {
   }
 };
 
-module.exports = { signUp, login };
+const refresh = async (req, res, next) => {
+  try {
+    const accessToken = await authService.refreshAccessToken(req.cookies.jwt);
+    return res.status(200).json({
+      success: true,
+      accessToken,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const logOut = async (req, res) => {
+  res.clearCookie("jwt", {
+    httpOnly: true,
+    sameSite: "lax",
+    secure: false,
+  });
+
+  res.json({
+    success: true,
+    message: "Logged out",
+  });
+};
+
+module.exports = { signUp, login, refresh, logOut };

@@ -62,4 +62,29 @@ const userLogin = async ({ email, password }) => {
   };
 };
 
-module.exports = { userRegister, userLogin };
+const refreshAccessToken = async (refreshToken) => {
+  if (!refreshToken) {
+    throw new AppError("unauthorized", 401);
+  }
+
+  const decoded = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
+  const user = await User.findById(decoded.user.id);
+  if (!user) {
+    throw new AppError("User not found", 404);
+  }
+  const accessToken = jwt.sign(
+    {
+      user: {
+        id: user._id,
+        role: user.role,
+      },
+    },
+    process.env.ACCESS_TOKEN_SECRET,
+    {
+      expiresIn: "15m",
+    },
+  );
+  return accessToken;
+};
+
+module.exports = { userRegister, userLogin, refreshAccessToken };
