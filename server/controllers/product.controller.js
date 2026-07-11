@@ -1,0 +1,16 @@
+const { createProductService } = require("../services/product.service");
+
+const createProduct = async (req, res, next) => {
+  try {
+    const product = await createProductService(req.body);
+    return res.status(201).json({
+      success: true,
+      message: "product created successfully",
+      data: product,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+module.exports = { createProduct };
