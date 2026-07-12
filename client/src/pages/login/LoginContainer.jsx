@@ -25,12 +25,12 @@ const LoginContainer = () => {
       const { accessToken, role } = response;
       localStorage.setItem("token", accessToken);
 
-      localStorage.setItem("role", JSON.stringify(role));
+      localStorage.setItem("role", role);
 
       if (role === "ADMIN") {
         navigate("/admin");
       } else {
-        navigate("/");
+        navigate("/products");
       }
     },
 
