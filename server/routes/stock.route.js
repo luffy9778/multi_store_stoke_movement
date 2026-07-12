@@ -5,10 +5,12 @@ const verifyRole = require("../middlewares/verifyRole");
 const {
   adjustStockSchema,
   transferStockSchema,
+  getStocksSchema,
 } = require("../validations/stock.validation");
 const {
   adjustStock,
   transferStock,
+  getStocks,
 } = require("../controllers/stock.controller");
 
 const router = express.Router();
@@ -26,5 +28,6 @@ router.post(
   validate(transferStockSchema),
   transferStock,
 );
+router.get("/", validate(getStocksSchema), getStocks);
 
 module.exports = router;

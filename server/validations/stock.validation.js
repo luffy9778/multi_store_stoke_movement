@@ -39,7 +39,24 @@ const transferStockSchema = z.object({
     }),
 });
 
+const getStocksSchema = z.object({
+  query: z.object({
+    productId: z
+      .string()
+      .regex(/^[0-9a-fA-F]{24}$/, "Invalid Product ID")
+      .optional(),
+    storeId: z
+      .string()
+      .regex(/^[0-9a-fA-F]{24}$/)
+      .optional(),
+    lowStock: z.coerce.number().int().min(0).optional(),
+    page: z.coerce.number().int().min(1).default(1),
+    limit: z.coerce.number().int().min(1).max(100).default(10),
+  }),
+});
+
 module.exports = {
   adjustStockSchema,
   transferStockSchema,
+  getStocksSchema,
 };

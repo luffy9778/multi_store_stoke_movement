@@ -126,7 +126,43 @@ const transferStockService = async ({
   }
 };
 
+const getStocksService = async ({
+  productId,
+  storeId,
+  lowStock,
+  page = 1,
+  limit = 10,
+}) => {
+  const filter = {};
+  if (productId) {
+    filter.product = productId;
+  }
+  if (storeId) {
+    filter.store = storeId;
+  }
+  if (lowStock !== undefined) {
+    filter.quantity = { $lte: lowStock };
+  }
+  console.log(lowStock)
+  const skip = (page - 1) * limit;
+
+  const [stocks, total] = await Promise.all([
+    Stock.find(filter)
+      .populate("product", "name sku")
+      .populate("store", "name")
+      .skip(skip)
+      .limit(limit).lean()
+      .sort({ quantity: 1 }),
+    Stock.countDocuments(filter),
+  ]);
+  return {
+    stocks,
+    pagination: { total, page, limit, totalPages: Math.ceil(total / limit) },
+  };
+};
+
 module.exports = {
   adjustStockService,
   transferStockService,
+  getStocksService,
 };

@@ -1,4 +1,7 @@
-const { createProductService } = require("../services/product.service");
+const {
+  createProductService,
+  getProductsService,
+} = require("../services/product.service");
 
 const createProduct = async (req, res, next) => {
   try {
@@ -13,4 +16,18 @@ const createProduct = async (req, res, next) => {
   }
 };
 
-module.exports = { createProduct };
+const getProducts = async (req, res, next) => {
+  try {
+    const result = await getProductsService(req.query);
+    return res.status(200).json({
+      success: true,
+      message: "products fetched successfully",
+      data: result.products,
+      pagination: result.pagination,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+module.exports = { createProduct,getProducts };

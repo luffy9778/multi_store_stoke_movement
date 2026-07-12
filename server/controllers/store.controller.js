@@ -1,4 +1,7 @@
-const { createStoreService } = require("../services/store.service");
+const {
+  createStoreService,
+  getStoresService,
+} = require("../services/store.service");
 
 const createStore = async (req, res, next) => {
   try {
@@ -13,4 +16,18 @@ const createStore = async (req, res, next) => {
   }
 };
 
-module.exports = { createStore };
+const getStores = async (req, res, next) => {
+  try {
+    const result = await getStoresService(req.query);
+    return res.status(200).json({
+      success: true,
+      message: "stores fetched successfully",
+      data: result.stores,
+      pagination: result.pagination,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+module.exports = { createStore, getStores };

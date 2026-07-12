@@ -1,6 +1,7 @@
 const {
   adjustStockService,
   transferStockService,
+  getStocksService,
 } = require("../services/stock.service");
 
 const adjustStock = async (req, res, next) => {
@@ -20,7 +21,7 @@ const adjustStock = async (req, res, next) => {
 const transferStock = async (req, res, next) => {
   try {
     const stock = await transferStockService(req.body);
-    
+
     return res.status(200).json({
       success: true,
       message: "stock transfered successfully",
@@ -31,7 +32,21 @@ const transferStock = async (req, res, next) => {
   }
 };
 
+const getStocks = async (req, res, next) => {
+  try {
+    const result = await getStocksService(req.query);
+    return res.status(200).json({
+      success: true,
+      message: "stocks fetched successfully",
+      data: result.stocks,
+      pagination: result.pagination,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
 module.exports = {
   adjustStock,
   transferStock,
+  getStocks,
 };

@@ -17,4 +17,16 @@ const createStoreService = async ({ name, location }) => {
   }
 };
 
-module.exports = { createStoreService };
+const getStoresService = async ({ page = 1, limit = 10 }) => {
+  const skip = (page - 1) * limit;
+  const [stores, total] = await Promise.all([
+    Store.find().sort({ createdAt: -1 }).skip(skip).limit(limit).lean(),
+    Store.countDocuments(),
+  ]);
+  return {
+    stores,
+    pagination: { total, page, limit, totalPages: Math.ceil(total / limit) },
+  };
+};
+
+module.exports = { createStoreService, getStoresService };
