@@ -22,11 +22,11 @@ npm run seed
 
 ### Admin
 - Email: admin@test.com
-- Password: Password123
+- Password: password123
 
 ### Shopper
 - Email: shopper@test.com
-- Password: Password123
+- Password: password123
 
 ## API Documentation
 http://localhost:5000/api-docs

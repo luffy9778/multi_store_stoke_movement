@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
 import LoginContainer from "./pages/login/LoginContainer";
 import SignUpContainer from "./pages/signUp/SignUpContainer";
 import UserProductContainer from "./pages/user/UserProductContainer";
@@ -45,6 +45,7 @@ function App() {
           element={<CreateStoreContainer />}
         />
       </Route>
+      <Route path="*" element={<Navigate to="/login" replace />} />
     </Routes>
   );
 }
