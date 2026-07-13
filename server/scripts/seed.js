@@ -52,7 +52,7 @@ const seed = async () => {
         stocks.push({
           product: product._id,
           store: store._id,
-          quantity: Math.floor(Math.random()),
+          quantity: Math.floor(Math.random()*50),
         });
       }
     }
