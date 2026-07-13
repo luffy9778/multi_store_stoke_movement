@@ -2,6 +2,8 @@ const express = require("express");
 const app = express();
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
+const swaggerUI = require("swagger-ui-express");
+const swaggerJsDoc = require("./config/swagger");
 app.use(
   cors({
     origin: process.env.CLIENT_URL,
@@ -18,6 +20,8 @@ app.use("/auth", require("./routes/auth.route"));
 app.use("/product", require("./routes/product.route"));
 app.use("/store", require("./routes/store.route"));
 app.use("/stock", require("./routes/stock.route"));
+
+app.use("/api-docs",swaggerUI.serve,swaggerUI.setup(swaggerJsDoc))
 
 app.use((err, req, res, next) => {
   console.log(err);
