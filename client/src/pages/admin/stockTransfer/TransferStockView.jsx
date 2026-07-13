@@ -9,22 +9,24 @@ import {
   Typography,
 } from "@mui/material";
 
-const AdjustStockView = ({
+const TransferStockView = ({
   products,
+  stores,
   productId,
   setProductId,
-  stores,
-  storeId,
-  setStoreId,
-  currentStock,
+  sourseStoreIdId,
+  setSourseStoreId,
+  destinationStoreId,
+  setDestinationStoreId,
   quantity,
   setQuantity,
+  currentStock,
   isPending,
   handleSubmit,
 }) => {
   return (
     <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
-      <h1>Adjust stock</h1>
+      <h1>Transfer stock</h1>
       <FormControl fullWidth>
         <InputLabel>Product</InputLabel>
         <Select
@@ -40,11 +42,11 @@ const AdjustStockView = ({
         </Select>
       </FormControl>
       <FormControl fullWidth>
-        <InputLabel>Store</InputLabel>
+        <InputLabel>Sourse Store</InputLabel>
         <Select
-          value={storeId}
+          value={sourseStoreIdId}
           label="store"
-          onChange={(e) => setStoreId(e.target.value)}
+          onChange={(e) => setSourseStoreId(e.target.value)}
         >
           {stores?.map((store) => (
             <MenuItem key={store?._id} value={store?._id}>
@@ -54,8 +56,24 @@ const AdjustStockView = ({
         </Select>
       </FormControl>
       <Typography>Current Stock: {currentStock ?? "--"}</Typography>
+
+      <FormControl fullWidth>
+        <InputLabel>Destination Store</InputLabel>
+        <Select
+          value={destinationStoreId}
+          label="store"
+          onChange={(e) => setDestinationStoreId(e.target.value)}
+        >
+          {stores?.map((store) => (
+            <MenuItem key={store?._id} value={store?._id}>
+              {store?.name}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+
       <TextField
-        label="Adjust qty By"
+        label="Transfer qty"
         type="number"
         value={quantity}
         onChange={(e) => setQuantity(e.target.value)}
@@ -63,12 +81,18 @@ const AdjustStockView = ({
       <Button
         variant="contained"
         onClick={handleSubmit}
-        disabled={isPending || !productId || !storeId || !quantity}
+        disabled={
+          isPending ||
+          !productId ||
+          !sourseStoreIdId ||
+          !destinationStoreId ||
+          !quantity
+        }
       >
-        Adjust
+        Transfer
       </Button>
     </Box>
   );
 };
 
-export default AdjustStockView;
+export default TransferStockView;

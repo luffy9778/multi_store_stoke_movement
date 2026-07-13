@@ -29,3 +29,8 @@ export const createStoreService = async (payload) => {
   const response = await privateApi.post("/store",payload);
   return response.data;
 };
+
+export const transferStockService = async (payload) => {
+  const response = await privateApi.post("/stock/transfer",payload);
+  return response.data;
+};

@@ -1,16 +1,17 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
-  adjustStockService,
   getProductsService,
   getStockService,
   getStoreService,
+  transferStockService,
 } from "../../../services/admin.service";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import TransferStockView from "./TransferStockView";
 import { useState } from "react";
-import AdjustStockView from "./AdjustStockView";
 
-const AdjustStockContainer = () => {
+const TransferStockContainer = () => {
   const [productId, setProductId] = useState("");
-  const [storeId, setStoreId] = useState("");
+  const [sourseStoreId, setSourseStoreId] = useState("");
+  const [destinationStoreId, setDestinationStoreId] = useState("");
   const [quantity, setQuantity] = useState("");
   const queryClient = useQueryClient();
 
@@ -23,18 +24,18 @@ const AdjustStockContainer = () => {
     queryFn: getStoreService,
   });
   const { data: currentStock } = useQuery({
-    queryKey: ["stock", productId, storeId],
-    queryFn: () => getStockService({ productId, storeId }),
-    enabled: !!productId && !!storeId,
+    queryKey: ["stock", productId, sourseStoreId],
+    queryFn: () => getStockService({ productId, storeId: sourseStoreId }),
+    enabled: !!productId && !!sourseStoreId,
   });
 
   const { mutate, isPending } = useMutation({
-    mutationFn: adjustStockService,
+    mutationFn: transferStockService,
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["stock", productId, storeId],
+        queryKey: ["stock", productId, sourseStoreId],
       });
-      alert("Stock updated successfully");
+      alert("Stock tranferd successfully");
 
       setQuantity("");
     },
@@ -44,16 +45,24 @@ const AdjustStockContainer = () => {
   });
 
   const handleSubmit = () => {
-    mutate({ productId, storeId, quantity: Number(quantity) });
+    mutate({
+      productId,
+      sourseStoreId,
+      destinationStoreId,
+      quantity: Number(quantity),
+    });
   };
+
   return (
-    <AdjustStockView
+    <TransferStockView
       productId={productId}
       products={products?.data}
       setProductId={setProductId}
-      storeId={storeId}
+      sourseStoreIdId={sourseStoreId}
+      destinationStoreId={destinationStoreId}
+      setSourseStoreId={setSourseStoreId}
+      setDestinationStoreId={setDestinationStoreId}
       stores={stores?.data}
-      setStoreId={setStoreId}
       currentStock={currentStock?.data?.[0]?.quantity}
       quantity={quantity}
       setQuantity={setQuantity}
@@ -63,4 +72,4 @@ const AdjustStockContainer = () => {
   );
 };
 
-export default AdjustStockContainer;
+export default TransferStockContainer;

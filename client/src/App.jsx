@@ -10,7 +10,7 @@ import AdjustStockContainer from "./pages/admin/stockAdjust/AdjustStockContainer
 import DashBoard from "./pages/admin/DashBoard";
 import CreateProductContainer from "./pages/admin/product/CreateProductContainer";
 import CreateStoreContainer from "./pages/admin/store/CreateStoreContainer";
-
+import TransferStockContainer from "./pages/admin/stockTransfer/TransferStockContainer";
 function App() {
   return (
     <Routes>
@@ -35,6 +35,7 @@ function App() {
       >
         <Route path="/admin/" element={<DashBoard />} />
         <Route path="/admin/stock/adjust" element={<AdjustStockContainer />} />
+        <Route path="/admin/stock/transfer" element={<TransferStockContainer />} />
         <Route
           path="/admin/product/create"
           element={<CreateProductContainer />}
