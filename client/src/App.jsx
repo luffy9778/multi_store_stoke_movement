@@ -8,6 +8,8 @@ import UserLayout from "./layouts/UserLayout";
 import AdminLayout from "./layouts/AdminLayout";
 import AdjustStockContainer from "./pages/admin/stockAdjust/AdjustStockContainer";
 import DashBoard from "./pages/admin/DashBoard";
+import CreateProductContainer from "./pages/admin/product/CreateProductContainer";
+import CreateStoreContainer from "./pages/admin/store/CreateStoreContainer";
 
 function App() {
   return (
@@ -33,6 +35,14 @@ function App() {
       >
         <Route path="/admin/" element={<DashBoard />} />
         <Route path="/admin/stock/adjust" element={<AdjustStockContainer />} />
+        <Route
+          path="/admin/product/create"
+          element={<CreateProductContainer />}
+        />
+        <Route
+          path="/admin/store/create"
+          element={<CreateStoreContainer />}
+        />
       </Route>
     </Routes>
   );

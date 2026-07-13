@@ -17,6 +17,12 @@ const Navbar = () => {
           <Link to="/admin/stock/adjust">
             <Button>stock-adjust</Button>
           </Link>
+          <Link to="/admin/product/create">
+            <Button>Add Productt</Button>
+          </Link>
+          <Link to="/admin/store/create">
+            <Button>Add Store</Button>
+          </Link>
         </>
       )}
     </Box>

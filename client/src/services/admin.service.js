@@ -19,3 +19,13 @@ export const adjustStockService = async (payload) => {
   const response = await privateApi.patch("/stock/adjust",payload);
   return response.data;
 };
+
+export const createProductService = async (payload) => {
+  const response = await privateApi.post("/product",payload);
+  return response.data;
+};
+
+export const createStoreService = async (payload) => {
+  const response = await privateApi.post("/store",payload);
+  return response.data;
+};
