@@ -4,18 +4,39 @@ const Product = require("../models/Product");
 const Store = require("../models/Store");
 const Stock = require("../models/Stock");
 const mongoose = require("mongoose");
+const User = require("../models/User");
+const bcrypt = require("bcrypt");
 
 const seed = async () => {
   try {
     await connectDB();
+    const password = await bcrypt.hash("password123", 10);
 
     await Promise.all([
+      User.deleteMany(),
       Product.deleteMany(),
       Store.deleteMany(),
       Stock.deleteMany(),
     ]);
 
     console.log("data deleted");
+
+    await User.insertMany([
+      {
+        name: "Admin",
+        email: "admin@test.com",
+        password,
+        role: "ADMIN",
+      },
+      {
+        name: "Shopper",
+        email: "shopper@test.com",
+        password,
+        role: "SHOPPER",
+      },
+    ]);
+
+    console.log("users created");
 
     const stores = await Store.insertMany([
       {
@@ -52,7 +73,7 @@ const seed = async () => {
         stocks.push({
           product: product._id,
           store: store._id,
-          quantity: Math.floor(Math.random()),
+          quantity: Math.floor(Math.random() * 50),
         });
       }
     }
